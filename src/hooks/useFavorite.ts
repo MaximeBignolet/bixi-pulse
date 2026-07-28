@@ -11,7 +11,8 @@ export function useFavorite() {
     }
   });
 
-  function toggleFavorite(stationId: string) {
+  function toggleFavorite(stationId: string, e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
     let updated: string[];
     if (favorites.includes(stationId)) {
       updated = favorites.filter((id) => id !== stationId);

@@ -34,4 +34,11 @@ export default defineConfig([
       'eol-last': ['error', 'always'],
     },
   },
+  {
+    // shadcn-generated files export a component plus its variants; fast refresh warning is expected there
+    files: ['**/components/ui/**'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])
