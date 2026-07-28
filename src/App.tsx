@@ -24,10 +24,10 @@ export function App() {
         </div>
         <HeaderClock />
       </header>
-      <main className="flex min-h-0 flex-1 flex-col-reverse lg:flex-row">
+      <main className="flex min-h-0 flex-1 flex-col-reverse lg:flex-row ">
         <section
           aria-label="Liste des stations"
-          className="flex min-h-0 flex-1 flex-col border-t lg:w-96 lg:flex-none lg:border-t-0 lg:border-r"
+          className="flex min-h-0 flex-1 flex-col border-t lg:w-96  lg:flex-none lg:border-t-0 lg:border-r"
         >
           <StationsList onStationSelect={setSelectedStationId} />
         </section>

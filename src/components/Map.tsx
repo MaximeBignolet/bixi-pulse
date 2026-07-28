@@ -92,7 +92,7 @@ export function MontrealMap({ selectedStationId }: {selectedStationId?: string})
         {LEGEND.map(({ label, dotClass }) => (
           <span key={label} className="flex items-center gap-1.5">
             <span aria-hidden className={cn("size-1.5 rounded-full", dotClass)} />
-            {label}
+            {label} lorem
           </span>
         ))}
       </div>

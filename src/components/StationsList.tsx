@@ -92,7 +92,7 @@ export function StationsList({ onStationSelect }: {onStationSelect: (stationId: 
         ) : filteredStations.length === 0 ? (
           <p className="px-4 py-12 text-center text-sm text-muted-foreground">{emptyMessage}</p>
         ) : (
-          <ul className="divide-y">
+          <ul className="divide-y overflow-x-hidden">
             {filteredStations.map((station) => {
               const level = getAvailabilityLevel(station.num_bikes_available);
               const isFavorite = favorites.includes(station.station_id);
