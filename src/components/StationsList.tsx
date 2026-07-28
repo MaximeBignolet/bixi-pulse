@@ -1,21 +1,30 @@
 import { useEffect, useState } from "react";
 import { useStations } from "../hooks/useStations";
+import { useClock } from "../hooks/useClock";
+import { Input } from "./ui/input";
 
 export function StationsList() {
   const { stations, error, isError, isPending } = useStations();
-  const [localeMontrealTime, setLocaleMontrealTime] = useState(() => {
-    const date = new Date();
-    return new Date(date.toLocaleString("en-US", { timeZone: "America/Montreal" })).toLocaleString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  });
+  const localeMontrealTime = useClock();
+ 
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const date = new Date();
-      setLocaleMontrealTime(new Date(date.toLocaleString("en-US", { timeZone: "America/Montreal" })).toLocaleString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
-    }, 1000);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value);
+  }
+
+  const filteredStations = stations.filter((station) =>
+    station.name.toLowerCase().includes(debouncedSearch.toLowerCase())
+  );
 
   if (isError) {
     return <span>Erreur: {error?.message}</span>;
@@ -34,12 +43,21 @@ export function StationsList() {
       <p>
         Heure locale: {localeMontrealTime}
       </p>
+      <div>
+        <Input placeholder="Rechercher une station" value={search} onChange={handleSearchChange}/>
+      </div>
       <ul>
-        {stations.map((station) => (
-          <li key={station.station_id}>
-          Station : {station.name} - {station.num_bikes_available} vélos disponibles - {station.num_docks_available} bornes disponibles
-          </li>
-        ))}
+        {
+          filteredStations.length ? (
+            filteredStations.map((station) => (
+              <li key={station.station_id}>
+              Station : {station.name} - {station.num_bikes_available} vélos disponibles - {station.num_docks_available} bornes disponibles
+              </li>
+            ))
+          ) : (
+            <li>Aucune station ne correspond à votre recherche.</li>
+          )
+        }
       </ul>
     </div>
   );
