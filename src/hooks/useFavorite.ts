@@ -3,8 +3,8 @@ import { useState } from "react";
 export function useFavorite() {
   const [favorites, setFavorites] = useState<string[]>(() => {
     const stored = localStorage.getItem("favoriteStations");
-    const parsed = stored ? JSON.parse(stored) : [];
     try {
+      const parsed = stored ? JSON.parse(stored) : [];
       return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
