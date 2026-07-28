@@ -1,75 +1,44 @@
-# React + TypeScript + Vite
+# BIXI Pulse 🚲
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Real-time dashboard for Montréal's BIXI bike-sharing network. Watch station availability change live on an interactive map, search stations, and keep your favorites one click away.
 
-Currently, two official plugins are available:
+> **Unofficial project** — not affiliated with BIXI Montréal. Built on their public GBFS feed.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![BIXI Pulse screenshot](docs/screenshot.png)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Live availability** — station data refreshes every 10 seconds, matching the feed's TTL
+- **Interactive map** — every station drawn as a colored marker (green / amber / red by bike availability), with a legend
+- **Fly-to selection** — click a station in the list and the map flies to it and opens its popup
+- **Debounced search** — filter stations by name as you type
+- **Favorites** — star stations, persisted in `localStorage`, with a favorites-only filter
+- **Montréal clock** — local time displayed via the native `Intl` timezone API
 
-## Expanding the ESLint configuration
+The UI is in French — the app targets Montréal.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) (strict) on [Vite](https://vite.dev/)
+- [TanStack Query](https://tanstack.com/query) for server state
+- [Tailwind CSS v4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) (Base UI primitives)
+- [react-leaflet](https://react-leaflet.js.org/) / [Leaflet](https://leafletjs.com/) for the map
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Architecture notes
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- The GBFS feed splits station data in two: `station_information` (static — names, coordinates) and `station_status` (dynamic — bikes and docks). Each has its own query with its own cache strategy: status refetches every 10 s (the feed's TTL), information stays fresh for much longer.
+- The two feeds are joined by a pure helper (`mergeStations`) using a `Map` index — one pass to index, one pass to merge, O(n).
+- Server state lives in the TanStack Query cache and is read where needed (`useStations` in both the list and the map — same key, one fetch). Client state (selected station, filters) is lifted to the nearest common ancestor.
 
+## Getting started
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Other scripts: `npm run build` (type-check + build), `npm run lint`, `npm run preview`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Data source
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+Station data comes from the public [GBFS 2.2 feed](https://gbfs.velobixi.com/gbfs/2-2/gbfs.json) published by BIXI Montréal. No API key required.

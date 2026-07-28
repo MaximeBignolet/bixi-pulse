@@ -16,8 +16,7 @@ const LEGEND = [
   { label: "Aucun", dotClass: AVAILABILITY_DOT_CLASSES.none },
 ];
 
-
-function StationPopupContent({station}: {station: Station}){
+function StationPopupContent({ station }: {station: Station}) {
   return (
     <>
       <p className="text-sm leading-snug font-medium">{station.name}</p>
@@ -41,7 +40,7 @@ function FlyToStation({ lat, lon }: { lat: number, lon: number }) {
 
 }
 
-export function MontrealMap({selectedStationId}: {selectedStationId?: string}) {
+export function MontrealMap({ selectedStationId }: {selectedStationId?: string}) {
   const { stations } = useStations();
   const selectedStation = stations.find((station) => station.station_id === selectedStationId);
   const lat = selectedStation?.lat;
@@ -52,7 +51,7 @@ export function MontrealMap({selectedStationId}: {selectedStationId?: string}) {
       return [lat, lon];
     }
     return null;
-  }, [lat, lon, selectedStation]);
+  }, [lat, lon]);
 
   return (
     <div className="relative h-full">

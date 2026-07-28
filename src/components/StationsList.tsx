@@ -8,7 +8,7 @@ import { getAvailabilityLevel, AVAILABILITY_DOT_CLASSES } from "@/helpers/availa
 import { pluralize } from "@/helpers/format";
 import { cn } from "@/lib/utils";
 
-export function StationsList({onStationSelect}: {onStationSelect: (stationId: string) => void}) {
+export function StationsList({ onStationSelect }: {onStationSelect: (stationId: string) => void}) {
   const { stations, isError, isPending } = useStations();
   const { favorites, toggleFavorite } = useFavorite();
   const [search, setSearch] = useState("");
@@ -57,7 +57,7 @@ export function StationsList({onStationSelect}: {onStationSelect: (stationId: st
             onPressedChange={setShowFavoritesOnly}
             variant="outline"
             aria-label="N'afficher que les favoris"
-           className="aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+            className="aria-pressed:bg-primary aria-pressed:text-primary-foreground"
           >
             <Star data-icon="inline-start" aria-hidden />
             Favoris
@@ -102,24 +102,24 @@ export function StationsList({onStationSelect}: {onStationSelect: (stationId: st
                   key={station.station_id}
                   className="flex items-center justify-between gap-2 px-3 py-2.5 transition-colors hover:bg-muted/50"
                 >
-                <button
-                  type="button"
-                  className="w-full cursor-pointer"
-                  onClick={() => { onStationSelect?.(station.station_id) }}
-                >
-                   <div className="flex flex-col items-start">
-                    <p className="truncate text-sm leading-tight font-medium">{station.name}</p>
-                    <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground tabular-nums">
-                      <span
-                        aria-hidden
-                        className={cn("size-1.5 rounded-full", AVAILABILITY_DOT_CLASSES[level])}
-                      />
-                      {pluralize(station.num_bikes_available, "vélo")}
-                      {" · "}
-                      {pluralize(station.num_docks_available, "borne")}
-                    </p>
-                  </div>
-                 </button>
+                  <button
+                    type="button"
+                    className="w-full cursor-pointer"
+                    onClick={() => { onStationSelect?.(station.station_id); }}
+                  >
+                    <div className="flex flex-col items-start">
+                      <p className="truncate text-sm leading-tight font-medium">{station.name}</p>
+                      <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground tabular-nums">
+                        <span
+                          aria-hidden
+                          className={cn("size-1.5 rounded-full", AVAILABILITY_DOT_CLASSES[level])}
+                        />
+                        {pluralize(station.num_bikes_available, "vélo")}
+                        {" · "}
+                        {pluralize(station.num_docks_available, "borne")}
+                      </p>
+                    </div>
+                  </button>
                   <button
                     type="button"
                     onClick={(e) => toggleFavorite(station.station_id, e)}
@@ -129,10 +129,10 @@ export function StationsList({onStationSelect}: {onStationSelect: (stationId: st
                       "flex size-8 shrink-0 items-center justify-end rounded-md transition-colors hover:bg-muted",
                       isFavorite ? "text-primary" : "text-muted-foreground/50 hover:text-foreground",
                     )}
-                    >
+                  >
                     <Star aria-hidden className={cn("size-4", isFavorite && "fill-current")} />
                   </button>
-              </li>
+                </li>
               );
             })}
           </ul>

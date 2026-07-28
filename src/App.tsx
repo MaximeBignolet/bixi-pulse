@@ -22,7 +22,7 @@ export function App() {
             </p>
           </div>
         </div>
-      <HeaderClock />
+        <HeaderClock />
       </header>
       <main className="flex min-h-0 flex-1 flex-col-reverse lg:flex-row">
         <section
