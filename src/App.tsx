@@ -16,7 +16,7 @@ export function App() {
             <Bike className="size-4" aria-hidden />
           </div>
           <div>
-            <p className="text-sm leading-none font-semibold tracking-tight">BIXI Pulse</p>
+            <h1 className="text-sm leading-none font-semibold tracking-tight">BIXI Pulse</h1>
             <p className="mt-1 text-[11px] leading-none text-muted-foreground">
               Stations en temps réel · Montréal
             </p>
