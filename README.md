@@ -6,6 +6,8 @@ Real-time dashboard for Montréal's BIXI bike-sharing network. Watch station ava
 
 ![BIXI Pulse screenshot](docs/screenshot.png)
 
+live demo : [Bixi Puls live demo](https://bixi-pulse.vercel.app/)
+
 ## Features
 
 - **Live availability** — station data refreshes every 10 seconds, matching the feed's TTL
