@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import { useStations } from "../hooks/useStations";
-import { useClock } from "../hooks/useClock";
+import { useStations } from "@/hooks/useStations";
+import { useClock } from "@/hooks/useClock";
 import { Input } from "./ui/input";
+import { useFavorite } from "@/hooks/useFavorite";
+import { Toggle } from "./ui/toggle";
 
 export function StationsList() {
   const { stations, error, isError, isPending } = useStations();
   const localeMontrealTime = useClock();
- 
+  const { favorites, toggleFavorite } = useFavorite();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -17,6 +20,7 @@ export function StationsList() {
 
     return () => clearTimeout(timer);
   }, [search]);
+  
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value);
@@ -24,7 +28,8 @@ export function StationsList() {
 
   const filteredStations = stations.filter((station) =>
     station.name.toLowerCase().includes(debouncedSearch.toLowerCase())
-  );
+  ).filter((station) => !showFavoritesOnly || favorites.includes(station.station_id));
+
 
   if (isError) {
     return <span>Erreur: {error?.message}</span>;
@@ -44,6 +49,11 @@ export function StationsList() {
         Heure locale: {localeMontrealTime}
       </p>
       <div>
+        <Toggle pressed={showFavoritesOnly} onPressedChange={setShowFavoritesOnly} size="sm" variant="outline">
+            Favoris
+        </Toggle>
+      </div>
+      <div>
         <Input placeholder="Rechercher une station" value={search} onChange={handleSearchChange}/>
       </div>
       <ul>
@@ -52,6 +62,9 @@ export function StationsList() {
             filteredStations.map((station) => (
               <li key={station.station_id}>
               Station : {station.name} - {station.num_bikes_available} vélos disponibles - {station.num_docks_available} bornes disponibles
+              <button onClick={() => toggleFavorite(station.station_id)} aria-label={favorites.includes(station.station_id) ? "Retirer des favoris" : "Ajouter aux favoris"}>
+                {favorites.includes(station.station_id) ? "★" : "☆"}
+              </button>
               </li>
             ))
           ) : (
