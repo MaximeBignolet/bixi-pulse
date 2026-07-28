@@ -44,12 +44,20 @@ function FlyToStation({ lat, lon }: { lat: number, lon: number }) {
 export function MontrealMap({selectedStationId}: {selectedStationId?: string}) {
   const { stations } = useStations();
   const selectedStation = stations.find((station) => station.station_id === selectedStationId);
-  const memoizedSelectedStation = useMemo(() => selectedStation, [selectedStation]);
+  const lat = selectedStation?.lat;
+  const lon = selectedStation?.lon;
+
+  const memoizedSelectedStation = useMemo(() => {
+    if (lat && lon) {
+      return [lat, lon];
+    }
+    return null;
+  }, [lat, lon, selectedStation]);
 
   return (
     <div className="relative h-full">
       <MapContainer center={[45.5017, -73.5673]} zoom={13} className="h-full w-full">
-        {memoizedSelectedStation && <FlyToStation lat={memoizedSelectedStation.lat} lon={memoizedSelectedStation.lon} />}
+        {memoizedSelectedStation && <FlyToStation lat={memoizedSelectedStation[0]} lon={memoizedSelectedStation[1]} />}
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -75,9 +83,9 @@ export function MontrealMap({selectedStationId}: {selectedStationId?: string}) {
             </CircleMarker>
           );
         })}
-        {memoizedSelectedStation && 
-              <Popup position={[memoizedSelectedStation.lat, memoizedSelectedStation.lon]}>
-                <StationPopupContent station={memoizedSelectedStation} />
+        {selectedStation && memoizedSelectedStation &&
+              <Popup position={[memoizedSelectedStation[0], memoizedSelectedStation[1]]}>
+                <StationPopupContent station={selectedStation} />
               </Popup>
         }
       </MapContainer>

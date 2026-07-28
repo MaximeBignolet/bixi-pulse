@@ -57,6 +57,7 @@ export function StationsList({onStationSelect}: {onStationSelect: (stationId: st
             onPressedChange={setShowFavoritesOnly}
             variant="outline"
             aria-label="N'afficher que les favoris"
+           className="aria-pressed:bg-primary aria-pressed:text-primary-foreground"
           >
             <Star data-icon="inline-start" aria-hidden />
             Favoris
