@@ -6,11 +6,11 @@ import type { Station } from '@/types/Station';
 
 function getStationColor(station: Station) {
     if (station.num_bikes_available > 0 && station.num_bikes_available < 5) {
-      return 'orange';
+      return '#f59e0b';
     } else if (station.num_bikes_available > 0) {
-      return 'green';
+      return '#10b981';
     } else {
-      return 'red';
+      return '#ef4444';
     }
   }
 
@@ -25,6 +25,7 @@ export function MontrealMap(){
         stations.map((station) => (
           <CircleMarker key={station.station_id} center={[station.lat, station.lon]} pathOptions={{
             color: getStationColor(station),
+            fillOpacity: 0.5,
           }}>
             <Popup>
               Station: {station.name} <br />
