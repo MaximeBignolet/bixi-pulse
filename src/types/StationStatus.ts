@@ -10,7 +10,7 @@ export interface StationStatusDetail {
 
 export interface StationStatus {
   stations: Array<StationStatusDetail>
-} 
+}
 
 export type GetStationStatusResponse = {
   data: StationStatus

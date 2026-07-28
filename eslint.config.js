@@ -18,5 +18,20 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // Formatting
+      semi: ['error', 'always'],
+      quotes: ['error', 'double', { avoidEscape: true }],
+      'jsx-quotes': ['error', 'prefer-double'],
+      indent: ['error', 2, { SwitchCase: 1 }],
+      'comma-dangle': ['error', 'always-multiline'],
+      'object-curly-spacing': ['error', 'always'],
+      'arrow-parens': ['error', 'always'],
+      'keyword-spacing': 'error',
+      'space-before-blocks': 'error',
+      'no-trailing-spaces': 'error',
+      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
+      'eol-last': ['error', 'always'],
+    },
   },
 ])

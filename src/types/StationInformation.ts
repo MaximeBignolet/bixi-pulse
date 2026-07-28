@@ -11,7 +11,7 @@ export interface StationsInformationDetail {
 
 export interface StationInformation {
   stations: Array<StationsInformationDetail>
-} 
+}
 
 export type GetStationInformationResponse = {
   data: StationInformation
